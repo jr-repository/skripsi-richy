@@ -60,7 +60,7 @@ interface SubKriteriaGlobal {
   kode_sub_kriteria: string;
 }
 
-const API_BASE_URL = 'https://ta-richy.vercel.app/backend-rekomendasi-karir';
+const API_BASE_URL = 'http://sipemalem.my.id/backend-rekomendasi-karir';
 
 const KriteriaGlobal: React.FC = () => {
   const [kriteria, setKriteria] = useState<KriteriaGlobal[]>([]);

@@ -63,7 +63,7 @@ interface PMCalculationResult {
   message?: string;
 }
 
-const API_BASE_URL = 'https://ta-richy.vercel.app/backend-rekomendasi-karir';
+const API_BASE_URL = 'http://sipemalem.my.id/backend-rekomendasi-karir';
 const SKALA_PENILAIAN = [1, 2, 3, 4, 5]; // Skala 1-5 untuk nilai ideal
 
 const PMSetup: React.FC = () => {
