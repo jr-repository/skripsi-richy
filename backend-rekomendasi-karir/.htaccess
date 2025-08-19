@@ -1,0 +1,9 @@
+# .htaccess untuk backend-rekomendasi-karir
+RewriteEngine On
+
+# Jika request bukan ke file yang ada
+RewriteCond %{REQUEST_FILENAME} !-f
+# Dan jika request bukan ke directory yang ada
+RewriteCond %{REQUEST_FILENAME} !-d
+# Maka arahkan semua request ke index.php
+RewriteRule ^(.*)$ index.php [QSA,L]

@@ -73,8 +73,8 @@ interface JobStatistics {
   message?: string;
 }
 
-const API_STATISTICS_URL_BASE = 'http://localhost/backend-rekomendasi-karir/statistics.php';
-const API_BASE_URL = 'http://localhost/backend-rekomendasi-karir';
+const API_STATISTICS_URL_BASE = 'https://ta-richy.vercel.app/backend-rekomendasi-karir/statistics.php';
+const API_BASE_URL = 'https://ta-richy.vercel.app/backend-rekomendasi-karir';
 
 const RecommendationDetail: React.FC = () => {
   const { jobId } = useParams<{ jobId: string }>();
