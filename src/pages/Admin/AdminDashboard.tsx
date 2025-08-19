@@ -189,7 +189,7 @@ interface Pekerjaan {
   nilai_total_ahp_pm?: number | null;
 }
 
-const API_BASE_URL = 'http://sipemalem.my.id/backend-rekomendasi-karir';
+const API_BASE_URL = 'https://sipemalem.my.id/backend-rekomendasi-karir';
 
 const AdminDashboard: React.FC = () => {
   const [pekerjaan, setPekerjaan] = useState<Pekerjaan[]>([]);

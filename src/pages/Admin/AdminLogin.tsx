@@ -17,7 +17,7 @@ const AdminLogin = () => {
   const navigate = useNavigate();
   const { toast } = useToast();
 
-  const API_BASE_URL = 'http://sipemalem.my.id/backend-rekomendasi-karir';
+  const API_BASE_URL = 'https://sipemalem.my.id/backend-rekomendasi-karir';
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();

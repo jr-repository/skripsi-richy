@@ -66,7 +66,7 @@ interface AHPResult {
   message?: string;
 }
 
-const API_BASE_URL = 'http://sipemalem.my.id/backend-rekomendasi-karir';
+const API_BASE_URL = 'https://sipemalem.my.id/backend-rekomendasi-karir';
 // SAATY_SCALE is used to define the fixed options, so it can include intermediate values.
 const SAATY_SCALE = [1, 2, 3, 4, 5, 6, 7, 8, 9];
 
