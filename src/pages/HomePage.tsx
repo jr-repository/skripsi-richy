@@ -663,9 +663,7 @@ const HomePage = () => {
             <p className="text-muted-foreground text-center md:text-left">
               © 2024 SPK Rekomendasi Karier. All rights reserved.
             </p>
-            <p className="text-muted-foreground text-center md:text-right mt-4 md:mt-0">
-              Made with ❤️ in Indonesia
-            </p>
+            
           </div>
         </div>
       </footer>
