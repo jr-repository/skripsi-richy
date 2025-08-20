@@ -127,13 +127,13 @@ const AdminLogin = () => {
               {isLoading ? 'Memproses...' : 'Masuk'}
             </Button>
           </form>
-          <div className="mt-6 p-4 bg-muted/30 rounded-lg">
+          {/* <div className="mt-6 p-4 bg-muted/30 rounded-lg">
             <p className="text-sm text-muted-foreground text-center">
               <strong>Akun Demo:</strong><br />
               Email: superadmin@example.com<br />
               Password: admin123
             </p>
-          </div>
+          </div> */}
         </CardContent>
       </Card>
     </div>
