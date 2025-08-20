@@ -1,3 +1,4 @@
+
 import { useState } from 'react';
 import { useLocation, useNavigate, Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
@@ -13,9 +14,7 @@ import {
   User,
   FileText,
   Database,
-  LogOut,
-  ChevronLeft,
-  ChevronRight
+  LogOut
 } from 'lucide-react';
 
 interface LayoutProps {
@@ -24,7 +23,6 @@ interface LayoutProps {
 
 const Layout = ({ children }: LayoutProps) => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
-  const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
   const location = useLocation();
   const navigate = useNavigate();
 
@@ -33,13 +31,13 @@ const Layout = ({ children }: LayoutProps) => {
   const adminMenuItems = [
     { path: '/admin', label: 'Dashboard', icon: <Home className="h-4 w-4" /> },
     { path: '/admin/kriteria-global', label: 'Kriteria Global', icon: <Settings className="h-4 w-4" /> },
-    // { path: '/admin/pekerjaan', label: 'Manajemen Pekerjaan', icon: <Database className="h-4 w-4" /> },
+    { path: '/admin/pekerjaan', label: 'Manajemen Pekerjaan', icon: <Database className="h-4 w-4" /> },
   ];
 
   const userMenuItems = [
     { path: '/user', label: 'Rekomendasi', icon: <Target className="h-4 w-4" /> },
-    // { path: '/user/profil', label: 'Profil Saya', icon: <User className="h-4 w-4" /> },
-    // { path: '/user/riwayat', label: 'Riwayat', icon: <FileText className="h-4 w-4" /> },
+    { path: '/user/profil', label: 'Profil Saya', icon: <User className="h-4 w-4" /> },
+    { path: '/user/riwayat', label: 'Riwayat', icon: <FileText className="h-4 w-4" /> },
   ];
 
   const menuItems = isAdminRoute ? adminMenuItems : userMenuItems;
@@ -76,25 +74,15 @@ const Layout = ({ children }: LayoutProps) => {
             </SheetContent>
           </Sheet>
 
-          {/* Desktop Sidebar Toggle */}
-          <Button
-            variant="ghost"
-            size="icon"
-            onClick={() => setSidebarCollapsed(!sidebarCollapsed)}
-            className="hidden md:flex"
-          >
-            {sidebarCollapsed ? <ChevronRight className="h-5 w-5" /> : <ChevronLeft className="h-5 w-5" />}
-          </Button>
-
           {/* Logo */}
-          {/* <div className="flex items-center space-x-3">
+          <div className="flex items-center space-x-3">
             <div className="h-8 w-8 rounded gradient-blue flex items-center justify-center">
               <Target className="h-5 w-5 text-white" />
             </div>
             <div>
               <h1 className="font-bold text-foreground">SPK Rekomendasi Karier</h1>
             </div>
-          </div> */}
+          </div>
 
           {/* Header Actions */}
           <div className="flex items-center space-x-4">
@@ -125,15 +113,12 @@ const Layout = ({ children }: LayoutProps) => {
 
       <div className="flex">
         {/* Desktop Sidebar */}
-        <aside className={`hidden md:block border-r border-border bg-card/30 min-h-[calc(100vh-4rem)] transition-all duration-300 ${
-          sidebarCollapsed ? 'w-16' : 'w-64'
-        }`}>
+        <aside className="hidden md:block w-64 border-r border-border bg-card/30 min-h-[calc(100vh-4rem)]">
           <DesktopSidebar 
             menuItems={menuItems}
             isAdminRoute={isAdminRoute}
             onModeSwitch={handleModeSwitch}
             currentPath={location.pathname}
-            collapsed={sidebarCollapsed}
           />
         </aside>
 
@@ -153,27 +138,23 @@ const DesktopSidebar = ({
   menuItems, 
   isAdminRoute, 
   onModeSwitch, 
-  currentPath,
-  collapsed 
+  currentPath 
 }: {
   menuItems: any[];
   isAdminRoute: boolean;
   onModeSwitch: () => void;
   currentPath: string;
-  collapsed: boolean;
 }) => (
   <div className="p-4 space-y-6">
     {/* Mode Indicator */}
-    {!collapsed && (
-      <div className="p-3 rounded-lg bg-gradient-to-r from-blue-500/10 to-blue-600/10 border border-blue-500/20">
-        <div className="flex items-center space-x-2 text-blue-400">
-          {isAdminRoute ? <Shield className="h-5 w-5" /> : <Users className="h-5 w-5" />}
-          <span className="font-medium">
-            {isAdminRoute ? 'Panel Admin' : 'Mode User'}
-          </span>
-        </div>
+    <div className="p-3 rounded-lg bg-gradient-to-r from-blue-500/10 to-blue-600/10 border border-blue-500/20">
+      <div className="flex items-center space-x-2 text-blue-400">
+        {isAdminRoute ? <Shield className="h-5 w-5" /> : <Users className="h-5 w-5" />}
+        <span className="font-medium">
+          {isAdminRoute ? 'Panel Admin' : 'Mode User'}
+        </span>
       </div>
-    )}
+    </div>
 
     {/* Navigation Menu */}
     <nav className="space-y-2">
@@ -185,47 +166,32 @@ const DesktopSidebar = ({
             currentPath === item.path
               ? 'bg-primary/20 text-primary'
               : 'text-muted-foreground hover:bg-muted hover:text-foreground'
-          } ${collapsed ? 'justify-center' : ''}`}
-          title={collapsed ? item.label : ''}
+          }`}
         >
           {item.icon}
-          {!collapsed && <span>{item.label}</span>}
+          <span>{item.label}</span>
         </Link>
       ))}
     </nav>
 
     {/* Mode Switch Button */}
-    {!collapsed && (
-      <Button
-        variant="outline"
-        onClick={onModeSwitch}
-        className="w-full justify-start"
-      >
-        {isAdminRoute ? (
-          <>
-            <User className="h-4 w-4 mr-2" />
-            Beralih ke Mode User
-          </>
-        ) : (
-          <>
-            <Shield className="h-4 w-4 mr-2" />
-            Beralih ke Mode Admin
-          </>
-        )}
-      </Button>
-    )}
-
-    {/* Collapsed Mode Switch Button */}
-    {collapsed && (
-      <Button
-        variant="outline"
-        onClick={onModeSwitch}
-        className="w-full p-2 justify-center"
-        title={isAdminRoute ? 'Beralih ke Mode User' : 'Beralih ke Mode Admin'}
-      >
-        {isAdminRoute ? <User className="h-4 w-4" /> : <Shield className="h-4 w-4" />}
-      </Button>
-    )}
+    <Button
+      variant="outline"
+      onClick={onModeSwitch}
+      className="w-full justify-start"
+    >
+      {isAdminRoute ? (
+        <>
+          <User className="h-4 w-4 mr-2" />
+          Beralih ke Mode User
+        </>
+      ) : (
+        <>
+          <Shield className="h-4 w-4 mr-2" />
+          Beralih ke Mode Admin
+        </>
+      )}
+    </Button>
   </div>
 );
 
