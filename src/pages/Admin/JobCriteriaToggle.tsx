@@ -62,7 +62,7 @@ interface JobSubCriterionDetail { // Status aktif dan nilai ideal sub-kriteria u
 }
 
 // Base URL untuk API backend Anda
-const API_BASE_URL = 'https://sipemalem.my.id/backend-rekomendasi-karir';
+const API_BASE_URL = 'http://localhost/backend-rekomendasi-karir';
 
 const JobCriteriaToggle: React.FC = () => {
   const { jobId } = useParams<{ jobId: string }>();
