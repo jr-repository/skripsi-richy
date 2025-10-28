@@ -66,7 +66,7 @@ interface AHPResult {
   message?: string;
 }
 
-const API_BASE_URL = 'https://antlia.id/antlia-backend/api';
+const API_BASE_URL = 'https://support.antlia.id/api';
 // SAATY_SCALE is used to define the fixed options, so it can include intermediate values.
 const SAATY_SCALE = [1, 2, 3, 4, 5, 6, 7, 8, 9];
 

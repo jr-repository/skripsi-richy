@@ -73,8 +73,8 @@ interface JobStatistics {
   message?: string;
 }
 
-const API_STATISTICS_URL_BASE = 'https://antlia.id/antlia-backend/api/statistics.php';
-const API_BASE_URL = 'https://antlia.id/antlia-backend/api';
+const API_STATISTICS_URL_BASE = 'https://support.antlia.id/api/statistics.php';
+const API_BASE_URL = 'https://support.antlia.id/api';
 
 const RecommendationDetail: React.FC = () => {
   const { jobId } = useParams<{ jobId: string }>();

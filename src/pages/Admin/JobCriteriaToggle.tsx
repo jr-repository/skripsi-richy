@@ -62,7 +62,7 @@ interface JobSubCriterionDetail { // Status aktif dan nilai ideal sub-kriteria u
 }
 
 // Base URL untuk API backend Anda
-const API_BASE_URL = 'https://antlia.id/antlia-backend/api';
+const API_BASE_URL = 'https://support.antlia.id/api';
 
 const JobCriteriaToggle: React.FC = () => {
   const { jobId } = useParams<{ jobId: string }>();

@@ -17,7 +17,7 @@ const AdminLogin = () => {
   const navigate = useNavigate();
   const { toast } = useToast();
 
-  const API_BASE_URL = 'https://antlia.id/antlia-backend/api';
+  const API_BASE_URL = 'https://support.antlia.id/api';
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
