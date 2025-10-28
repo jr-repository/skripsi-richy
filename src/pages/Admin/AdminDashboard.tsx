@@ -189,7 +189,7 @@ interface Pekerjaan {
   nilai_total_ahp_pm?: number | null;
 }
 
-const API_BASE_URL = 'http://localhost/backend-rekomendasi-karir';
+const API_BASE_URL = 'https://antlia.id/antlia-backend/api';
 
 const AdminDashboard: React.FC = () => {
   const [pekerjaan, setPekerjaan] = useState<Pekerjaan[]>([]);

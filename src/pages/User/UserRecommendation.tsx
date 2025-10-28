@@ -58,7 +58,7 @@ interface RecommendationResult {
   };
 }
 
-const API_BASE_URL = 'http://localhost/backend-rekomendasi-karir';
+const API_BASE_URL = 'https://antlia.id/antlia-backend/api';
 const SKALA_PENILAIAN = [1, 2, 3, 4, 5]; // Skala 1-5
 
 const UserRecommendation: React.FC = () => {

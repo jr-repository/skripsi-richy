@@ -60,7 +60,7 @@ interface SubKriteriaGlobal {
   kode_sub_kriteria: string;
 }
 
-const API_BASE_URL = 'http://localhost/backend-rekomendasi-karir';
+const API_BASE_URL = 'https://antlia.id/antlia-backend/api';
 
 const KriteriaGlobal: React.FC = () => {
   const [kriteria, setKriteria] = useState<KriteriaGlobal[]>([]);
