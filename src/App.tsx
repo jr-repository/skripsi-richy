@@ -17,6 +17,8 @@ import PMSetup from './pages/Admin/PMSetup';
 import UserRecommendation from './pages/User/UserRecommendation';
 import RecommendationDetail from './pages/User/RecommendationDetail';
 import Layout from './components/Layout';
+import FeedbackPage from './pages/feedback'; 
+import ReportFeedbackPage from './pages/ReportFeedback';
 
 const queryClient = new QueryClient();
 
@@ -58,9 +60,14 @@ function App() {
             <Route path="/admin/pekerjaan/:jobId/ahp" element={<ProtectedAdminRoute><AHPSetup /></ProtectedAdminRoute>} />
             <Route path="/admin/pekerjaan/:jobId/pm" element={<ProtectedAdminRoute><PMSetup /></ProtectedAdminRoute>} />
 
+            <Route path="/admin/feedback/report" element={<ProtectedAdminRoute><ReportFeedbackPage /></ProtectedAdminRoute>} />
+
             {/* User routes with Layout */}
             <Route path="/user" element={<Layout><UserRecommendation /></Layout>} />
             <Route path="/user/rekomendasi/:jobId/detail" element={<Layout><RecommendationDetail /></Layout>} />
+
+            {/* Feedback / UAT Page - Rute baru */}
+            <Route path="/feedback" element={<Layout><FeedbackPage /></Layout>} />
 
             {/* Fallback route */}
             <Route path="*" element={<div className="min-h-screen flex items-center justify-center bg-background text-foreground">

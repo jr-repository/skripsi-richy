@@ -31,12 +31,12 @@ const Layout = ({ children }: LayoutProps) => {
   const adminMenuItems = [
     { path: '/admin', label: 'Dashboard', icon: <Home className="h-4 w-4" /> },
     { path: '/admin/kriteria-global', label: 'Kriteria Global', icon: <Settings className="h-4 w-4" /> },
-    // { path: '/admin/pekerjaan', label: 'Manajemen Pekerjaan', icon: <Database className="h-4 w-4" /> },
+    { path: '/feedback', label: 'Feedback', icon: <Database className="h-4 w-4" /> },
   ];
 
   const userMenuItems = [
     { path: '/user', label: 'Rekomendasi', icon: <Target className="h-4 w-4" /> },
-    // { path: '/user/profil', label: 'Profil Saya', icon: <User className="h-4 w-4" /> },
+    { path: '/feedback', label: 'Feedback', icon: <User className="h-4 w-4" /> },
     // { path: '/user/riwayat', label: 'Riwayat', icon: <FileText className="h-4 w-4" /> },
   ];
 
