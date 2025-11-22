@@ -367,7 +367,7 @@ const FeedbackPage: React.FC = () => {
             {formData.tipe_pengguna === 'Pakar' && (
               <CardContent className="border-t pt-6 -mx-6 space-y-6">
                 <h3 className="text-xl font-semibold border-b pb-2 text-primary flex items-center">
-                    <Users className="h-5 w-5 mr-2" /> Pertanyaan untuk Pakar
+                    <Users className="h-5 w-5 mr-2" /> Pertanyaan untuk Ahli
                 </h3>
                 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
