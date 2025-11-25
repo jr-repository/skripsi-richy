@@ -1,8 +1,8 @@
-
 import { useState } from 'react';
 import { useLocation, useNavigate, Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
+import { useToast } from '@/hooks/use-toast'; // Import toast
 import { 
   Menu, 
   Home, 
@@ -25,6 +25,7 @@ const Layout = ({ children }: LayoutProps) => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const location = useLocation();
   const navigate = useNavigate();
+  const { toast } = useToast(); // Inisialisasi toast
 
   const isAdminRoute = location.pathname.startsWith('/admin');
   
@@ -47,8 +48,23 @@ const Layout = ({ children }: LayoutProps) => {
     navigate(newPath);
   };
 
+  // FUNGSI LOGOUT DIPERBAIKI DI SINI
   const handleLogout = () => {
-    navigate('/');
+    // 1. Hapus sesi dari localStorage
+    localStorage.removeItem('adminAuth'); 
+    
+    // 2. Tampilkan notifikasi
+    toast({
+      title: "Logout Berhasil",
+      description: "Anda telah berhasil keluar dari sistem.",
+    });
+
+    // 3. Arahkan navigasi sesuai role saat ini
+    if (isAdminRoute) {
+      navigate('/admin/login');
+    } else {
+      navigate('/');
+    }
   };
 
   return (
