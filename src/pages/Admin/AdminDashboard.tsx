@@ -42,11 +42,12 @@ import {
   LogOut,
   Loader2,
   ArrowRight,
-  ArrowLeft
+  ArrowLeft,
+  ArrowDown,
+  ChevronDown
 } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import { Progress } from '@/components/ui/progress';
-import { ArrowDown } from "lucide-react";
 
 // Inline JobForm component
 interface JobFormProps {
@@ -204,6 +205,10 @@ const AdminDashboard: React.FC = () => {
   const [showAddAhliForm, setShowAddAhliForm] = useState(false);
   const [loadingAhli, setLoadingAhli] = useState(false);
   
+  // State for UI Interactions
+  const [isWorkflowOpen, setIsWorkflowOpen] = useState<boolean>(false); // Default minimized
+  const [creatorFilter, setCreatorFilter] = useState<string>('all');
+
   // State for Pagination
   const [currentPage, setCurrentPage] = useState<number>(1);
   const itemsPerPage = 10;
@@ -282,6 +287,9 @@ const AdminDashboard: React.FC = () => {
 
   // New function to fetch admin list
   const fetchAdmins = useCallback(async () => {
+    // Although initially for superadmin, we might need this for the filter dropdown even for regular users if we want to filter by "Who created what"
+    // Or just derive unique creators from the job list. 
+    // Keeping existing logic: Fetch if superadmin.
     if (userRole !== 'superadmin') {
       return;
     }
@@ -456,12 +464,37 @@ const AdminDashboard: React.FC = () => {
     },
   ];
 
-  // Pagination logic
-  const totalPages = Math.ceil(pekerjaan.length / itemsPerPage);
+  // Derive unique creators for the filter dropdown
+  const uniqueCreators = useMemo(() => {
+    const creators = new Map();
+    pekerjaan.forEach(job => {
+      if (job.admin_id && job.nama_admin) {
+        creators.set(job.admin_id, job.nama_admin);
+      }
+    });
+    return Array.from(creators.entries()).map(([id, name]) => ({ id, name }));
+  }, [pekerjaan]);
+
+  // Filtered Data
+  const filteredPekerjaan = useMemo(() => {
+    if (creatorFilter === 'all') {
+      return pekerjaan;
+    }
+    return pekerjaan.filter(job => String(job.admin_id) === creatorFilter);
+  }, [pekerjaan, creatorFilter]);
+
+  // Pagination logic based on filtered data
+  const totalPages = Math.ceil(filteredPekerjaan.length / itemsPerPage);
+  
+  // Reset page when filter changes
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [creatorFilter]);
+
   const paginatedPekerjaan = useMemo(() => {
     const startIndex = (currentPage - 1) * itemsPerPage;
-    return pekerjaan.slice(startIndex, startIndex + itemsPerPage);
-  }, [pekerjaan, currentPage, itemsPerPage]);
+    return filteredPekerjaan.slice(startIndex, startIndex + itemsPerPage);
+  }, [filteredPekerjaan, currentPage, itemsPerPage]);
 
   const handleNextPage = () => {
     setCurrentPage(prev => prev + 1);
@@ -517,38 +550,48 @@ const AdminDashboard: React.FC = () => {
         ))}
       </div>
       
-      {/* Alur Section */}
+      {/* Alur Section (Collapsible) */}
       <Card className="bg-card/50 border-border">
-        <CardHeader>
-          <CardTitle className="text-foreground">Alur Proses Rekomendasi</CardTitle>
-          <CardDescription>Tahapan yang perlu dilewati untuk setiap pekerjaan.</CardDescription>
-        </CardHeader>
-        <CardContent>
-          <div className="flex flex-col md:flex-row items-center justify-between space-y-4 md:space-y-0 md:space-x-4">
-            <div className="flex-1 text-center">
-              <Settings className="h-8 w-8 text-primary mx-auto" />
-              <p className="mt-2 text-sm font-medium">1. Atur Kriteria & Sub Kriteria</p>
-            </div>
-            <ArrowRight className="h-6 w-6 text-muted-foreground hidden md:block" />
-            <ArrowDown className="h-6 w-6 text-muted-foreground block md:hidden" />
-            <div className="flex-1 text-center">
-              <BarChart3 className="h-8 w-8 text-primary mx-auto" />
-              <p className="mt-2 text-sm font-medium">2. Hitung AHP</p>
-            </div>
-            <ArrowRight className="h-6 w-6 text-muted-foreground hidden md:block" />
-            <ArrowDown className="h-6 w-6 text-muted-foreground block md:hidden" />
-            <div className="flex-1 text-center">
-              <Target className="h-8 w-8 text-primary mx-auto" />
-              <p className="mt-2 text-sm font-medium">3. Atur PM</p>
-            </div>
-            <ArrowRight className="h-6 w-6 text-muted-foreground hidden md:block" />
-            <ArrowDown className="h-6 w-6 text-muted-foreground block md:hidden" />
-            <div className="flex-1 text-center">
-              <Briefcase className="h-8 w-8 text-primary mx-auto" />
-              <p className="mt-2 text-sm font-medium">4. Selesai</p>
-            </div>
+        <CardHeader 
+          className="cursor-pointer flex flex-row items-center justify-between" 
+          onClick={() => setIsWorkflowOpen(!isWorkflowOpen)}
+        >
+          <div className="space-y-1">
+            <CardTitle className="text-foreground">Alur Proses Rekomendasi</CardTitle>
+            <CardDescription>Tahapan yang perlu dilewati untuk setiap pekerjaan.</CardDescription>
           </div>
-        </CardContent>
+          <Button variant="ghost" size="icon">
+            <ChevronDown className={`h-6 w-6 text-muted-foreground transition-transform duration-200 ${isWorkflowOpen ? 'rotate-180' : ''}`} />
+          </Button>
+        </CardHeader>
+        {isWorkflowOpen && (
+          <CardContent>
+            <div className="flex flex-col md:flex-row items-center justify-between space-y-4 md:space-y-0 md:space-x-4 pt-2">
+              <div className="flex-1 text-center">
+                <Settings className="h-8 w-8 text-primary mx-auto" />
+                <p className="mt-2 text-sm font-medium">1. Atur Kriteria & Sub Kriteria</p>
+              </div>
+              <ArrowRight className="h-6 w-6 text-muted-foreground hidden md:block" />
+              <ArrowDown className="h-6 w-6 text-muted-foreground block md:hidden" />
+              <div className="flex-1 text-center">
+                <BarChart3 className="h-8 w-8 text-primary mx-auto" />
+                <p className="mt-2 text-sm font-medium">2. Hitung AHP</p>
+              </div>
+              <ArrowRight className="h-6 w-6 text-muted-foreground hidden md:block" />
+              <ArrowDown className="h-6 w-6 text-muted-foreground block md:hidden" />
+              <div className="flex-1 text-center">
+                <Target className="h-8 w-8 text-primary mx-auto" />
+                <p className="mt-2 text-sm font-medium">3. Atur PM</p>
+              </div>
+              <ArrowRight className="h-6 w-6 text-muted-foreground hidden md:block" />
+              <ArrowDown className="h-6 w-6 text-muted-foreground block md:hidden" />
+              <div className="flex-1 text-center">
+                <Briefcase className="h-8 w-8 text-primary mx-auto" />
+                <p className="mt-2 text-sm font-medium">4. Selesai</p>
+              </div>
+            </div>
+          </CardContent>
+        )}
       </Card>
 
       {/* Admin Management Section (Visible only to Superadmin) */}
@@ -603,9 +646,27 @@ const AdminDashboard: React.FC = () => {
 
       {/* Job List Table */}
       <Card className="bg-card/50 border-border">
-        <CardHeader>
-          <CardTitle className="text-foreground">Daftar Pekerjaan</CardTitle>
-          <CardDescription>Kelola semua pekerjaan dalam sistem</CardDescription>
+        <CardHeader className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+          <div>
+            <CardTitle className="text-foreground">Daftar Pekerjaan</CardTitle>
+            <CardDescription>Kelola semua pekerjaan dalam sistem</CardDescription>
+          </div>
+          <div className="flex items-center gap-2">
+            <Label htmlFor="creatorFilter" className="whitespace-nowrap">Filter User Create:</Label>
+            <select
+              id="creatorFilter"
+              className="h-9 w-[200px] rounded-md border border-input bg-background px-3 py-1 text-sm shadow-sm transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring"
+              value={creatorFilter}
+              onChange={(e) => setCreatorFilter(e.target.value)}
+            >
+              <option value="all">Semua User</option>
+              {uniqueCreators.map((creator) => (
+                <option key={creator.id} value={creator.id}>
+                  {creator.name}
+                </option>
+              ))}
+            </select>
+          </div>
         </CardHeader>
         <CardContent>
           {loading ? (
@@ -614,8 +675,10 @@ const AdminDashboard: React.FC = () => {
               <span className="ml-2 text-muted-foreground">Memuat pekerjaan...</span>
             </div>
           ) : (
-            pekerjaan.length === 0 ? (
-              <p className="text-center text-muted-foreground py-10">Belum ada data pekerjaan. Silakan tambahkan pekerjaan baru.</p>
+            paginatedPekerjaan.length === 0 ? (
+              <p className="text-center text-muted-foreground py-10">
+                {pekerjaan.length === 0 ? "Belum ada data pekerjaan. Silakan tambahkan pekerjaan baru." : "Tidak ada pekerjaan yang sesuai dengan filter."}
+              </p>
             ) : (
               <div className="overflow-x-auto">
                 <Table>
@@ -649,31 +712,28 @@ const AdminDashboard: React.FC = () => {
                         <TableCell>
                           <div className="flex flex-wrap justify-center gap-2">
                             <Link to={`/admin/pekerjaan/${job.id}/kriteria`}>
-                              <Button variant="outline" size="sm" className="flex items-center">
-                                <Eye className="h-3 w-3 mr-1" />
-                                Kriteria
+                              <Button variant="outline" size="icon" title="Atur Kriteria">
+                                <Settings className="h-4 w-4" />
                               </Button>
                             </Link>
                             <Link to={`/admin/pekerjaan/${job.id}/ahp`}>
-                              <Button variant="outline" size="sm" className="flex items-center">
-                                <BarChart3 className="h-3 w-3 mr-1" />
-                                Hitung AHP
+                              <Button variant="outline" size="icon" title="Hitung AHP">
+                                <BarChart3 className="h-4 w-4" />
                               </Button>
                             </Link>
                             <Link to={`/admin/pekerjaan/${job.id}/pm`}>
-                              <Button variant="outline" size="sm" className="flex items-center">
-                                <Target className="h-3 w-3 mr-1" />
-                                Atur PM
+                              <Button variant="outline" size="icon" title="Atur PM">
+                                <Target className="h-4 w-4" />
                               </Button>
                             </Link>
                             <Button
                               variant="outline"
-                              size="sm"
-                              className="flex items-center"
+                              size="icon"
+                              title="Edit Pekerjaan"
                               onClick={() => handleEditJob(job)}
                               disabled={Number(job.admin_id) !== loggedInAdminId && userRole !== 'superadmin'}
                             >
-                              <Edit className="h-3 w-3" />
+                              <Edit className="h-4 w-4" />
                             </Button>
 
                             {/* Delete Confirmation Dialog */}
@@ -681,14 +741,15 @@ const AdminDashboard: React.FC = () => {
                               <DialogTrigger asChild>
                                 <Button
                                   variant="outline"
-                                  size="sm"
-                                  className="text-red-400 hover:text-red-300 flex items-center"
+                                  size="icon"
+                                  title="Hapus Pekerjaan"
+                                  className="text-red-400 hover:text-red-300"
                                   disabled={Number(job.admin_id) !== loggedInAdminId && userRole !== 'superadmin'}
                                   onClick={() => {
                                     setJobToDelete(job);
                                   }}
                                 >
-                                  <Trash2 className="h-3 w-3" />
+                                  <Trash2 className="h-4 w-4" />
                                 </Button>
                               </DialogTrigger>
                               <DialogContent>
@@ -715,7 +776,7 @@ const AdminDashboard: React.FC = () => {
           )}
           
           {/* Pagination Controls */}
-          {pekerjaan.length > itemsPerPage && (
+          {filteredPekerjaan.length > itemsPerPage && (
             <div className="flex justify-between items-center mt-4">
               <Button
                 variant="outline"
