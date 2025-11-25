@@ -67,7 +67,6 @@ interface AHPResult {
 }
 
 const API_BASE_URL = 'https://support.antlia.id/api';
-// SAATY_SCALE is used to define the fixed options, so it can include intermediate values.
 const SAATY_SCALE = [1, 2, 3, 4, 5, 6, 7, 8, 9];
 
 const importanceScale = [
@@ -89,7 +88,6 @@ const AHPSetup: React.FC = () => {
   const { toast } = useToast();
 
   const [jobName, setJobName] = useState<string>('');
-  // key: "k1_k2", value: Saaty score
   const [comparisonValues, setComparisonValues] = useState<Record<string, number>>({});
   const [loading, setLoading] = useState<boolean>(true);
   const [ahpCalculationResult, setAhpCalculationResult] = useState<AHPResult | null>(null);
@@ -102,7 +100,6 @@ const AHPSetup: React.FC = () => {
   const userRole = adminData.role;
   const loggedInAdminId = adminData.userId;
 
-  // Cek otorisasi
   const isAuthorizedToEdit = jobAdminId === loggedInAdminId || userRole === 'superadmin';
 
   // Fetch job details

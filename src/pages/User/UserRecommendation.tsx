@@ -420,10 +420,10 @@ const UserRecommendation: React.FC = () => {
                                 </Label>
                               </div>
                             </RadioGroup>
-                            {/* <div className="flex justify-between text-xs text-muted-foreground">
-                              <span>Sangat Kurang</span> 
-                              <span>Sangat Baik</span> BELUM TENTU YEUH
-                            </div> */}
+                            <div className="flex justify-between text-xs text-muted-foreground">
+                              <span>Kurang ---  Sedang  --- Sangat Baik</span> 
+                              {/* <span>Sangat Baik</span> */}
+                            </div>
                           </div>
                         </div>
                       ))}
