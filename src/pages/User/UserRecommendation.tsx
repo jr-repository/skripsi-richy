@@ -421,7 +421,7 @@ const UserRecommendation: React.FC = () => {
                               </div>
                             </RadioGroup>
                             <div className="flex justify-between text-xs text-muted-foreground">
-                              <span>Kurang ---  Sedang  --- Sangat Baik</span> 
+                              <span>Kurang --------  Sedang  -------- Sangat Baik</span> 
                               {/* <span>Sangat Baik</span> */}
                             </div>
                           </div>
